@@ -1,0 +1,83 @@
+
+import smtplib
+from smtplib import SMTP
+import requests
+from bs4 import BeautifulSoup
+import re
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email import encoders
+f = open("filmler.csv", 'w')
+
+# create the csv writer
+writer = csv.writer(f)
+
+# write a row to the csv file
+
+writer.writerow(["Filmin adi", "Filmin puani"])
+for i in range(0,250):
+    writer.writerow([nameList2[i], ratingList[i]])
+# close the file
+f.close()
+
+
+#creating the message to be written using the fetched data
+mesaj = "Movies with rating higher than 8.5:\n"
+for i in range(0,250):
+    if ratingList[i]>8.5:
+      mesaj += nameList2[i]
+      mesaj += ", "
+print(mesaj)
+
+
+
+#sending the email
+sender = 'sender email'
+receivers = ["receiver1","receiver2"]
+
+#creatig teh message object and setting the attributes
+msg = MIMEMultipart()
+msg['Subject'] = "Email"
+msg['From'] = sender
+msg['To'] = ",".join(receivers)
+msg.attach(MIMEText(mesaj, "plain")) #adding the prewritten message
+
+
+filename = "filmler.csv"  # In same directory as script
+
+
+with open(filename, "rb") as attachment:
+    part = MIMEBase("application", "octet-stream")
+    part.set_payload(attachment.read())
+
+# Encode file    
+encoders.encode_base64(part)
+
+# header
+part.add_header(
+    "Content-Disposition",
+    f"attachment; filename= {filename}",
+)
+
+# Add attachment to message and convert message to string
+msg.attach(part)
+text = msg.as_string()
+
+
+try:
+   smtpObj = SMTP("smtp.gmail.com",587)
+   smtpObj.ehlo()
+   smtpObj.starttls()
+   smtpObj.login("username", "password")
+   
+   
+   smtpObj.sendmail(sender, receivers, text)        
+
+
+   print ("Successfully sent email")
+   smtpObj.quit()
+except Exception:
+   print(Exception)
+   print ("Error: unable to send email")
