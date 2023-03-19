@@ -16,14 +16,14 @@ writer = csv.writer(f)
 
 # write a row to the csv file
 
-writer.writerow(["Filmin adi", "Filmin puani"])
+writer.writerow(["Name of the movie", "Rating of the movie"])
 for i in range(0,250):
     writer.writerow([nameList2[i], ratingList[i]])
 # close the file
 f.close()
 
 
-#creating the message to be written using the fetched data
+#creating the message (mesaj) to be written using the fetched data
 mesaj = "Movies with rating higher than 8.5:\n"
 for i in range(0,250):
     if ratingList[i]>8.5:
