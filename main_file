@@ -37,7 +37,7 @@ print(mesaj)
 sender = 'sender email'
 receivers = ["receiver1","receiver2"]
 
-#creatig teh message object and setting the attributes
+#creatig the message object and setting the attributes
 msg = MIMEMultipart()
 msg['Subject'] = "Email"
 msg['From'] = sender
